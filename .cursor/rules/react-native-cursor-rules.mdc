@@ -1,0 +1,71 @@
+---
+description: React Native Cursor Rules
+globs: 
+alwaysApply: false
+---
+You are an expert in TypeScript, React Native, React Native for macOS, and Mobile App Development.
+
+  Code Style and Structure:
+  - Write concise, technical TypeScript code with accurate examples.
+  - Use functional and declarative programming patterns; avoid classes.
+  - Ensure components are modular, reusable, and maintainable.
+  - Organize files by feature, grouping related components, hooks, and styles.
+  
+  Naming Conventions:
+  - Use descriptive variable names with auxiliary verbs (e.g., `isLoading`, `hasError`).
+  - Use camelCase for variable and function names (e.g., `isFetchingData`, `handleUserInput`).
+  - Use PascalCase for component names (e.g., `UserProfile`, `ChatScreen`).
+  - Directory names should be lowercase and hyphenated (e.g., `user-profile`, `chat-screen`).
+  - Favor named exports for components.
+  
+  TypeScript Usage:
+  - Use TypeScript for all components.
+  - Prefer using types. Use interfaces only when necessary, and explain the reason why.
+  - Avoid enums; use maps instead.
+  - Enable strict typing in `tsconfig.json`.
+  - Avoid using `any`; strive for precise types.
+  
+  Performance Optimization:
+  - `useEffect` is almost always unnecessary. Prefer plain variables in the component body. Refer to: https://react.dev/learn/you-might-not-need-an-effect.
+  - Avoid anonymous functions in `renderItem` or event handlers to prevent re-renders.
+  - Optimize images: use WebP format where supported, include size data.
+  - Implement code splitting and lazy loading for non-critical components with React's Suspense and dynamic imports.
+  - Avoid unnecessary re-renders by memoizing components and using useMemo and useCallback hooks appropriately.
+  
+  UI and Styling:
+  - Use consistent styling, through `StyleSheet.create()`.
+  - Implement responsive design with Flexbox.
+  - Ensure responsive design by considering different screen sizes and orientations.
+  - Ensure high accessibility (a11y) standards using ARIA roles and native accessibility props.
+  - Leverage react-native-reanimated and react-native-gesture-handler for performant animations and gestures.
+  
+  Navigation:
+  - Use react-navigation for routing and navigation; follow its best practices for stack, tab, and drawer navigators.
+  - Leverage deep linking and universal links for better user engagement and navigation flow.
+
+  State Management:
+  - Use React Context and useReducer for managing global state.
+  - Leverage react-query for data fetching and caching; avoid excessive API calls.
+  - For complex state management, consider using Zustand.
+
+  Error Handling and Validation:
+  - Use Zod for runtime validation and error handling.
+  - Implement proper error logging using Sentry or a similar service.
+  - Prioritize error handling and edge cases:
+    - Handle errors at the beginning of functions.
+    - Use early returns for error conditions to avoid deeply nested if statements.
+    - Avoid unnecessary else statements; use if-return pattern instead.
+    - Implement global error boundaries to catch and handle unexpected errors.
+
+  Testing:
+  - Write unit tests using Jest and React Native Testing Library.
+  - Implement integration tests for critical user flows using Maestro.
+
+  Security:
+  - Sanitize user inputs to prevent XSS attacks.
+  - Use react-native-encrypted-storage for secure storage of sensitive data.
+  - Ensure secure communication with APIs using HTTPS and proper authentication.
+
+  Best Practices:
+  - Follow React Native's threading model to ensure smooth UI performance.
+    
