@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3C2B2FDB13A50E2230BB599C /* libPods-BetterSettings-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5853CCF2ED11135BB9A48847 /* libPods-BetterSettings-macOS.a */; };
+		401A38EA2D8A3EE100F77999 /* PowerManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 401A38E92D8A3EE100F77999 /* PowerManagement.m */; };
+		401A38ED2D8A3F2800F77999 /* PowerManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401A38EC2D8A3F2800F77999 /* PowerManagement.swift */; };
 		424DD1104ECD77C53DDBA03F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1DCA4F7FD21C311E8F037C62 /* PrivacyInfo.xcprivacy */; };
 		5142014D2437B4B30078DB4F /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5142014C2437B4B30078DB4F /* AppDelegate.mm */; };
 		514201522437B4B40078DB4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 514201512437B4B40078DB4F /* Assets.xcassets */; };
@@ -18,7 +20,10 @@
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* BetterSettings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSettings.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1DCA4F7FD21C311E8F037C62 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		1DCA4F7FD21C311E8F037C62 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		401A38E92D8A3EE100F77999 /* PowerManagement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PowerManagement.m; sourceTree = "<group>"; };
+		401A38EB2D8A3F2800F77999 /* BetterSettings-macOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BetterSettings-macOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		401A38EC2D8A3F2800F77999 /* PowerManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerManagement.swift; sourceTree = "<group>"; };
 		514201492437B4B30078DB4F /* BetterSettings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSettings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -58,7 +63,6 @@
 				D833C4E05F1F3E433FFD28BD /* Pods-BetterSettings-macOS.debug.xcconfig */,
 				A8E63BEA6E6592C1048F5106 /* Pods-BetterSettings-macOS.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -81,6 +85,9 @@
 				514201562437B4B40078DB4F /* Info.plist */,
 				514201572437B4B40078DB4F /* main.m */,
 				514201592437B4B40078DB4F /* BetterSettings.entitlements */,
+				401A38E92D8A3EE100F77999 /* PowerManagement.m */,
+				401A38EC2D8A3F2800F77999 /* PowerManagement.swift */,
+				401A38EB2D8A3F2800F77999 /* BetterSettings-macOS-Bridging-Header.h */,
 			);
 			path = "BetterSettings-macOS";
 			sourceTree = "<group>";
@@ -170,6 +177,7 @@
 					};
 					514201482437B4B30078DB4F = {
 						CreatedOnToolsVersion = 11.4;
+						LastSwiftMigration = 1540;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -309,7 +317,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				401A38EA2D8A3EE100F77999 /* PowerManagement.m in Sources */,
 				514201582437B4B40078DB4F /* main.m in Sources */,
+				401A38ED2D8A3F2800F77999 /* PowerManagement.swift in Sources */,
 				5142014D2437B4B30078DB4F /* AppDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +399,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = BetterSettings;
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "BetterSettings-macOS/BetterSettings-macOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -412,6 +423,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = BetterSettings;
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "BetterSettings-macOS/BetterSettings-macOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -472,10 +484,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -531,10 +540,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = false;
