@@ -1,6 +1,15 @@
-#import <RCTAppDelegate.h>
 #import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : RCTAppDelegate
+@class RCTBridge;
 
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate>
+{
+  NSStatusItem *statusItem;
+  NSPopover *popover;
+}
+
+@property(nonatomic, readonly) RCTBridge *bridge;
+@property(nonatomic, strong, readonly) NSPopover *popover;
+- (void)openPopover;
+- (void)closePopover;
 @end

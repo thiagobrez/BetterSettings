@@ -1,17 +1,63 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTBridge.h>
+#import <React/RCTRootView.h>
+
+@interface AppDelegate () <RCTBridgeDelegate>
+@end
 
 @implementation AppDelegate
 
+- (void)awakeFromNib {
+  [super awakeFromNib];
+
+  _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-  self.moduleName = @"BetterSettings";
-  // You can add your custom initial props in the dictionary below.
-  // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
+  statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+  
+  NSButton *button = [statusItem button];
+  [button setImage:[NSImage imageWithSystemSymbolName:@"bolt.batteryblock" accessibilityDescription:nil]];
+  [button setTarget:self];
+  [button setAction:@selector(togglePopover:)];
 
-  return [super applicationDidFinishLaunching:notification];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:_bridge moduleName:@"BetterSettings" initialProperties:@{}];
+  NSViewController *rootViewController = [[NSViewController alloc] init];
+  rootViewController.view = rootView;
+
+  popover = [[NSPopover alloc] init];
+  popover.contentSize = NSMakeSize(380, 450);
+  popover.contentViewController = rootViewController;
+  popover.behavior = NSPopoverBehaviorTransient;
+}
+
+- (void)openPopover {
+  [popover showRelativeToRect:statusItem.button.bounds ofView:statusItem.button preferredEdge:NSMinYEdge];
+  [popover.contentViewController.view.window makeKeyWindow];
+}
+
+- (void)closePopover {
+    [popover close];
+}
+
+- (void)togglePopover:(id)sender {
+  if (popover.isShown) {
+    [self closePopover];
+  } else {
+    [self openPopover];
+  }
+}
+
+// Called when the user tries to reopen the app from the Dock or Spotlight
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)visibleWindows {
+    if (!visibleWindows) {
+      [self openPopover];
+    }
+
+    return YES;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
