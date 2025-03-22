@@ -23,6 +23,8 @@
   [button setImage:[NSImage imageWithSystemSymbolName:@"bolt.batteryblock" accessibilityDescription:nil]];
   [button setTarget:self];
   [button setAction:@selector(togglePopover:)];
+  [button setButtonType:NSButtonTypeToggle];
+  [button setAlternateImage:[NSImage imageWithSystemSymbolName:@"bolt.batteryblock.fill" accessibilityDescription:nil]];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:_bridge moduleName:@"BetterSettings" initialProperties:@{}];
   NSViewController *rootViewController = [[NSViewController alloc] init];
@@ -31,16 +33,18 @@
   popover = [[NSPopover alloc] init];
   popover.contentSize = NSMakeSize(380, 450);
   popover.contentViewController = rootViewController;
-  popover.behavior = NSPopoverBehaviorTransient;
+  popover.behavior = NSPopoverBehaviorApplicationDefined;
 }
 
 - (void)openPopover {
   [popover showRelativeToRect:statusItem.button.bounds ofView:statusItem.button preferredEdge:NSMinYEdge];
   [popover.contentViewController.view.window makeKeyWindow];
+  [statusItem.button setState:NSControlStateValueOn];
 }
 
 - (void)closePopover {
-    [popover close];
+  [popover close];
+  [statusItem.button setState:NSControlStateValueOff];
 }
 
 - (void)togglePopover:(id)sender {

@@ -38,7 +38,7 @@ function App(): React.JSX.Element {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
-				<Text style={styles.title}>BetterSettings</Text>
+				<Text style={styles.title}>PowerBuddy 🔋</Text>
 				<View style={styles.toggleContainer}>
 					<Text style={styles.label}>Prevent Display Sleep</Text>
 					<Switch
@@ -49,7 +49,10 @@ function App(): React.JSX.Element {
 					/>
 				</View>
 				<Text style={styles.status}>
-					Status: {isEnabled ? "Display will stay awake" : "Display can sleep"}
+					Status:{" "}
+					{isEnabled
+						? "Display will stay awake for 5 minutes"
+						: "Display can sleep"}
 				</Text>
 				{error && <Text style={styles.error}>Error: {error}</Text>}
 			</View>
@@ -82,7 +85,7 @@ const styles = StyleSheet.create({
 	},
 	status: {
 		fontSize: 14,
-		color: "#666",
+		// color: "#666",
 	},
 	error: {
 		marginTop: 10,
