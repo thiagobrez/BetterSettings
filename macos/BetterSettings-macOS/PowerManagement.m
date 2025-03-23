@@ -7,8 +7,9 @@
 
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(PowerManagement, NSObject)
+@interface RCT_EXTERN_MODULE(PowerManagement, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(preventSleep:(nonnull NSNumber *)minutes
                   resolver:(RCTPromiseResolveBlock)resolve

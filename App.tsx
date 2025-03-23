@@ -1,15 +1,28 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Switch, Text, View } from "react-native";
-import PowerManagement from "./src/modules/PowerManagement";
+import PowerManagement, {
+	TIMER_ENDED_EVENT,
+} from "./src/modules/PowerManagement";
 
 function App(): React.JSX.Element {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [sleepMinutes, setSleepMinutes] = useState(5); // Default to 5 minutes
+	const [sleepMinutes, setSleepMinutes] = useState(1); // Default to 5 minutes
 
 	useEffect(() => {
 		checkCurrentState();
+
+		// Set up event listener for when timer ends
+		const subscription = PowerManagement.addListener(TIMER_ENDED_EVENT, () => {
+			// Timer has ended, update UI state
+			setIsEnabled(false);
+		});
+
+		// Clean up the subscription on unmount
+		return () => {
+			subscription.remove();
+		};
 	}, []);
 
 	const checkCurrentState = async () => {

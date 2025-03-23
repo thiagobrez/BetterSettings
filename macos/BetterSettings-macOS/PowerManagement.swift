@@ -10,21 +10,20 @@ import IOKit
 import IOKit.pwr_mgt
 
 @objc(PowerManagement)
-class PowerManagement: NSObject {
+class PowerManagement: RCTEventEmitter {
     private var assertionID: IOPMAssertionID = 0
     private var timer: Timer?
+    private var hasListeners = false
     
     @objc
     func preventSleep(_ minutes: NSNumber, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         // Cancel any existing timer
         timer?.invalidate()
         
-        // Release existing assertion if it exists
-        if assertionID != 0 {
-            IOPMAssertionRelease(assertionID)
-            assertionID = 0
-        }
+        // Release existing assertion, if it exists
+        releaseAssertion()
         
+        // Create assertion
         var assertionID: IOPMAssertionID = 0
         let reason = "User requested to prevent display sleep" as CFString
         let result = IOPMAssertionCreateWithName(
@@ -33,16 +32,21 @@ class PowerManagement: NSObject {
             reason,
             &assertionID
         )
-        
+      
         if result == kIOReturnSuccess {
             self.assertionID = assertionID
             
-            // Set timer to release the assertion after specified minutes
+            // If assertion is created successfully, set timer to release the assertion after specified minutes
             let minutesDouble = minutes.doubleValue
+          
             if minutesDouble > 0 {
-                timer = Timer.scheduledTimer(withTimeInterval: minutesDouble * 60, repeats: false) { [weak self] _ in
-                    self?.releaseAssertion()
+              // Timer needs to be scheduled in the main queue
+              DispatchQueue.main.async {
+                self.timer = Timer.scheduledTimer(withTimeInterval: minutesDouble * 60, repeats: false) { [weak self] _ in
+                  self?.releaseAssertion()
+                  self?.sendTimerEndedEvent()
                 }
+              }
             }
             
             resolve(true)
@@ -57,23 +61,23 @@ class PowerManagement: NSObject {
     
     @objc
     func allowSleep(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        // Cancel any existing timer
         timer?.invalidate()
-        timer = nil
         
-        if assertionID != 0 {
-            let result = IOPMAssertionRelease(assertionID)
-            if result == kIOReturnSuccess {
-                assertionID = 0
-                resolve(true)
-            } else {
-                reject(
-                    "ERROR",
-                    "Failed to allow sleep. Error code: \(result)",
-                    NSError(domain: "PowerManagement", code: Int(result))
-                )
-            }
+        // Release existing assertion, if it exists
+        let result = releaseAssertion()
+      
+        if result == kIOReturnSuccess {
+            resolve(true)
+        } else if result == kIOReturnError {
+            reject(
+                "ERROR",
+                "Failed to allow sleep. Error code: \(result)",
+                NSError(domain: "PowerManagement", code: Int(result))
+            )
         } else {
-            resolve(true) // Already in allow sleep state
+            // No assertionID, already allowed to sleep
+            resolve(true)
         }
     }
     
@@ -82,17 +86,42 @@ class PowerManagement: NSObject {
         resolve(assertionID != 0)
     }
     
-    private func releaseAssertion() {
+    private func releaseAssertion() -> IOReturn {
         if assertionID != 0 {
-            IOPMAssertionRelease(assertionID)
+            let result = IOPMAssertionRelease(assertionID)
             assertionID = 0
+            return result
+        }
+      
+        return -1
+    }
+    
+    private func sendTimerEndedEvent() {
+        if hasListeners {
+            self.sendEvent(withName: "PowerManagementTimerEnded", body: nil)
         }
     }
     
     deinit {
         timer?.invalidate()
-        if assertionID != 0 {
-            IOPMAssertionRelease(assertionID)
-        }
+        releaseAssertion()
+    }
+  
+    // MARK: RCTEventEmitter setup
+    
+    override func supportedEvents() -> [String] {
+        return ["PowerManagementTimerEnded"]
+    }
+    
+    override func startObserving() {
+        hasListeners = true
+    }
+    
+    override func stopObserving() {
+        hasListeners = false
+    }
+    
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
     }
 }
