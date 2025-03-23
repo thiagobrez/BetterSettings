@@ -13,7 +13,7 @@
 RCT_EXTERN_METHOD(preventSleep:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(allowSleep:(NSNumber *)minutes
+RCT_EXTERN_METHOD(allowSleep:(nonnull NSNumber *)minutes
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
