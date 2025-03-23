@@ -33,7 +33,12 @@
   popover = [[NSPopover alloc] init];
   popover.contentSize = NSMakeSize(380, 450);
   popover.contentViewController = rootViewController;
-  popover.behavior = NSPopoverBehaviorApplicationDefined;
+  popover.behavior = NSPopoverBehaviorTransient;
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(popoverDidClose:)
+                                             name:NSPopoverDidCloseNotification
+                                             object:popover];
 }
 
 - (void)openPopover {
@@ -55,6 +60,10 @@
   }
 }
 
+- (void)popoverDidClose:(NSNotification *)notification {
+  [statusItem.button setState:NSControlStateValueOff];
+}
+
 // Called when the user tries to reopen the app from the Dock or Spotlight
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)visibleWindows {
     if (!visibleWindows) {
@@ -63,6 +72,12 @@
 
     return YES;
 }
+
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+// MARK: React Native init configuration
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
