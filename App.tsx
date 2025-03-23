@@ -6,6 +6,7 @@ import PowerManagement from "./src/modules/PowerManagement";
 function App(): React.JSX.Element {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [sleepMinutes, setSleepMinutes] = useState(5); // Default to 5 minutes
 
 	useEffect(() => {
 		checkCurrentState();
@@ -25,9 +26,9 @@ function App(): React.JSX.Element {
 	const toggleSwitch = async () => {
 		try {
 			if (!isEnabled) {
-				await PowerManagement.preventSleep();
+				await PowerManagement.preventSleep(sleepMinutes);
 			} else {
-				await PowerManagement.allowSleep(5); // Default to 5 minutes
+				await PowerManagement.allowSleep();
 			}
 			await checkCurrentState();
 		} catch (err) {
@@ -51,7 +52,7 @@ function App(): React.JSX.Element {
 				<Text style={styles.status}>
 					Status:{" "}
 					{isEnabled
-						? "Display will stay awake for 5 minutes"
+						? `Display will stay awake for ${sleepMinutes} minutes`
 						: "Display can sleep"}
 				</Text>
 				{error && <Text style={styles.error}>Error: {error}</Text>}

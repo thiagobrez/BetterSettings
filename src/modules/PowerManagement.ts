@@ -1,8 +1,8 @@
 import { NativeModules } from "react-native";
 
 interface PowerManagementInterface {
-	preventSleep(): Promise<boolean>;
-	allowSleep(minutes: number): Promise<boolean>;
+	preventSleep(minutes: number): Promise<boolean>;
+	allowSleep(): Promise<boolean>;
 	getCurrentState(): Promise<boolean>;
 }
 

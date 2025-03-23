@@ -10,11 +10,11 @@
 
 @interface RCT_EXTERN_MODULE(PowerManagement, NSObject)
 
-RCT_EXTERN_METHOD(preventSleep:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(preventSleep:(nonnull NSNumber *)minutes
+                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(allowSleep:(nonnull NSNumber *)minutes
-                  resolver:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(allowSleep:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getCurrentState:(RCTPromiseResolveBlock)resolve
