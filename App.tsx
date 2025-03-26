@@ -1,14 +1,24 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Switch, Text, View } from "react-native";
+import {
+	Button,
+	Pressable,
+	SafeAreaView,
+	StyleSheet,
+	Switch,
+	Text,
+	TextInput,
+	View,
+} from "react-native";
 import PowerManagement, {
 	TIMER_ENDED_EVENT,
 } from "./src/modules/PowerManagement";
+import { theme } from "./src/theme";
 
 function App(): React.JSX.Element {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [sleepMinutes, setSleepMinutes] = useState(1); // Default to 5 minutes
+	const [sleepMinutes, setSleepMinutes] = useState("5");
 
 	useEffect(() => {
 		checkCurrentState();
@@ -39,7 +49,7 @@ function App(): React.JSX.Element {
 	const toggleSwitch = async () => {
 		try {
 			if (!isEnabled) {
-				await PowerManagement.preventSleep(sleepMinutes);
+				await PowerManagement.preventSleep(Number(sleepMinutes));
 			} else {
 				await PowerManagement.allowSleep();
 			}
@@ -49,62 +59,122 @@ function App(): React.JSX.Element {
 		}
 	};
 
+	const onReduceMinutes = () => {
+		setSleepMinutes(String(Number(sleepMinutes) - 5));
+	};
+
+	const onAddMinutes = () => {
+		setSleepMinutes(String(Number(sleepMinutes) + 5));
+	};
+
+	const onPreventSleep = () => {
+		PowerManagement.preventSleep(Number(sleepMinutes));
+	};
+
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={styles.content}>
-				<Text style={styles.title}>PowerBuddy 🔋</Text>
-				<View style={styles.toggleContainer}>
-					<Text style={styles.label}>Prevent Display Sleep</Text>
-					<Switch
-						trackColor={{ false: "#767577", true: "#81b0ff" }}
-						thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-						onValueChange={toggleSwitch}
-						value={isEnabled}
-					/>
+		<View style={styles.container}>
+			<View style={styles.verticalBlock}>
+				<View>
+					<Text style={styles.headerText}>Prevent display sleep</Text>
 				</View>
-				<Text style={styles.status}>
-					Status:{" "}
-					{isEnabled
-						? `Display will stay awake for ${sleepMinutes} minutes`
-						: "Display can sleep"}
-				</Text>
-				{error && <Text style={styles.error}>Error: {error}</Text>}
+				<View style={styles.counter}>
+					<Pressable
+						style={({ pressed }) => [
+							styles.counterButton,
+							pressed && { opacity: 0.5 },
+						]}
+						onPress={onReduceMinutes}
+					>
+						<Text>-</Text>
+					</Pressable>
+					<TextInput
+						style={styles.counterInput}
+						placeholder="5"
+						placeholderTextColor={"#aaa"}
+						keyboardType="numeric"
+						value={sleepMinutes.toString()}
+						onChangeText={setSleepMinutes}
+					/>
+					<Pressable
+						style={({ pressed }) => [
+							styles.counterButton,
+							pressed && { opacity: 0.5 },
+						]}
+						onPress={onAddMinutes}
+					>
+						<Text>+</Text>
+					</Pressable>
+					<Text style={{ position: "absolute", right: 20 }}>
+						{!sleepMinutes || Number(sleepMinutes) > 1 ? "minutes" : "minute"}
+					</Text>
+				</View>
+				<Pressable
+					style={({ pressed }) => [
+						styles.startButton,
+						pressed && { opacity: 0.5 },
+					]}
+					onPress={onPreventSleep}
+				>
+					<Text>START</Text>
+				</Pressable>
 			</View>
-		</SafeAreaView>
+
+			<View style={styles.separator} />
+
+			<View style={styles.verticalBlock}>
+				<Text style={styles.headerText}>Active rules</Text>
+			</View>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		// backgroundColor: "#f5f5f5",
 	},
-	content: {
+	verticalBlock: {
+		flex: 1,
 		padding: 20,
-		alignItems: "center",
 	},
-	title: {
-		fontSize: 24,
+	headerText: {
 		fontWeight: "bold",
-		marginBottom: 30,
+		color: theme.colors.secondary,
 	},
-	toggleContainer: {
+	counter: {
+		flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 20,
+		justifyContent: "center",
+		gap: 10,
 	},
-	label: {
-		fontSize: 16,
-		marginRight: 10,
+	counterButton: {
+		width: 40,
+		height: 40,
+		borderWidth: 1,
+		borderRadius: 5,
+		borderColor: theme.colors.separator,
+		alignItems: "center",
+		justifyContent: "center",
 	},
-	status: {
-		fontSize: 14,
-		// color: "#666",
+	counterInput: {
+		width: 50,
+		height: 40,
 	},
-	error: {
-		marginTop: 10,
-		color: "red",
-		fontSize: 14,
+	separator: {
+		height: 1,
+		backgroundColor: theme.colors.separator,
+		marginHorizontal: 20,
+	},
+	startButton: {
+		width: 150,
+		height: 40,
+		borderWidth: 1,
+		borderRadius: 5,
+		borderColor: theme.colors.separator,
+		backgroundColor: theme.colors.success,
+		alignItems: "center",
+		justifyContent: "center",
+		alignSelf: "center",
 	},
 });
 
