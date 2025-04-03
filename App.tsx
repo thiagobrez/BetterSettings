@@ -1,7 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import {
-	Button,
 	Pressable,
 	SafeAreaView,
 	StyleSheet,
@@ -10,15 +9,59 @@ import {
 	TextInput,
 	View,
 } from "react-native";
+import Button from "./src/components/Button";
 import PowerManagement, {
 	TIMER_ENDED_EVENT,
 } from "./src/modules/PowerManagement";
 import { theme } from "./src/theme";
 
+const quickActions = [
+	{
+		label: "5 m",
+		minutes: 5,
+	},
+	{
+		label: "10 m",
+		minutes: 10,
+	},
+	{
+		label: "15 m",
+		minutes: 15,
+	},
+	{
+		label: "30 m",
+		minutes: 30,
+	},
+	{
+		label: "45 m",
+		minutes: 45,
+	},
+	{
+		label: "1 h",
+		minutes: 60,
+	},
+	{
+		label: "2 h",
+		minutes: 120,
+	},
+	{
+		label: "5 h",
+		minutes: 300,
+	},
+	{
+		label: "12 h",
+		minutes: 720,
+	},
+	{
+		label: "24 h",
+		minutes: 1440,
+	},
+];
+
 function App(): React.JSX.Element {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [sleepMinutes, setSleepMinutes] = useState("5");
+	const [sleepMinutes, setSleepMinutes] = useState("30");
 
 	useEffect(() => {
 		checkCurrentState();
@@ -75,39 +118,51 @@ function App(): React.JSX.Element {
 		<View style={styles.container}>
 			<View style={styles.verticalBlock}>
 				<View>
+					<Text style={styles.headerText}>Quick actions</Text>
+				</View>
+
+				<View style={styles.quickActions}>
+					{quickActions.map((action) => (
+						<Button
+							key={action.minutes}
+							onPress={() => setSleepMinutes(String(action.minutes))}
+						>
+							<Text>{action.label}</Text>
+						</Button>
+					))}
+				</View>
+			</View>
+
+			<View style={styles.verticalBlock}>
+				<View>
 					<Text style={styles.headerText}>Prevent display sleep</Text>
 				</View>
+
 				<View style={styles.counter}>
-					<Pressable
-						style={({ pressed }) => [
-							styles.counterButton,
-							pressed && { opacity: 0.5 },
-						]}
-						onPress={onReduceMinutes}
-					>
+					<Button onPress={onReduceMinutes}>
 						<Text>-</Text>
-					</Pressable>
-					<TextInput
-						style={styles.counterInput}
-						placeholder="5"
-						placeholderTextColor={"#aaa"}
-						keyboardType="numeric"
-						value={sleepMinutes.toString()}
-						onChangeText={setSleepMinutes}
-					/>
-					<Pressable
-						style={({ pressed }) => [
-							styles.counterButton,
-							pressed && { opacity: 0.5 },
-						]}
-						onPress={onAddMinutes}
-					>
+					</Button>
+
+					<View style={styles.inputContainer}>
+						<TextInput
+							style={styles.counterInput}
+							placeholder="5"
+							placeholderTextColor={"#aaa"}
+							keyboardType="numeric"
+							value={sleepMinutes.toString()}
+							onChangeText={setSleepMinutes}
+						/>
+					</View>
+
+					<Button onPress={onAddMinutes}>
 						<Text>+</Text>
-					</Pressable>
-					<Text style={{ position: "absolute", right: 20 }}>
+					</Button>
+
+					{/* <Text style={{ position: "absolute", right: 20 }}>
 						{!sleepMinutes || Number(sleepMinutes) > 1 ? "minutes" : "minute"}
-					</Text>
+					</Text> */}
 				</View>
+
 				<Pressable
 					style={({ pressed }) => [
 						styles.startButton,
@@ -118,12 +173,6 @@ function App(): React.JSX.Element {
 					<Text>START</Text>
 				</Pressable>
 			</View>
-
-			<View style={styles.separator} />
-
-			<View style={styles.verticalBlock}>
-				<Text style={styles.headerText}>Active rules</Text>
-			</View>
 		</View>
 	);
 }
@@ -131,17 +180,17 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		padding: 20,
+		gap: 20,
 	},
 	verticalBlock: {
-		flex: 1,
-		padding: 20,
+		gap: 20,
 	},
 	headerText: {
 		fontWeight: "bold",
 		color: theme.colors.secondary,
 	},
 	counter: {
-		flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -158,7 +207,16 @@ const styles = StyleSheet.create({
 	},
 	counterInput: {
 		width: 50,
+		textAlign: "center",
+	},
+	inputContainer: {
+		width: 50,
 		height: 40,
+		borderWidth: 1,
+		borderColor: theme.colors.separator,
+		borderRadius: 5,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	separator: {
 		height: 1,
@@ -175,6 +233,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		alignSelf: "center",
+	},
+	quickActions: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		gap: 10,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });
 
