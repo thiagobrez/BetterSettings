@@ -60,20 +60,15 @@ function App(): React.JSX.Element {
 	const [sleepMinutes, setSleepMinutes] = useState("30");
 	const [remainingTime, setRemainingTime] = useState<number | null>(null);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
-	const isRunningRef = useRef(false);
 
 	useEffect(() => {
-		// Set up event listener for when timer ends
 		const subscription = PowerManagement.addListener(TIMER_ENDED_EVENT, () => {
 			// Timer has ended, update UI state
 		});
 
-		// Clean up the subscription and timer on unmount
 		return () => {
 			subscription.remove();
-			if (timerRef.current) {
-				clearInterval(timerRef.current);
-			}
+			if (timerRef.current) clearInterval(timerRef.current);
 		};
 	}, []);
 
@@ -86,41 +81,33 @@ function App(): React.JSX.Element {
 	};
 
 	const togglePreventSleep = () => {
-		if (remainingTime) {
+		if (remainingTime !== null) {
 			PowerManagement.allowSleep();
+
 			if (timerRef.current) {
 				clearInterval(timerRef.current);
 				timerRef.current = null;
 			}
-			isRunningRef.current = false;
+
 			setRemainingTime(null);
 			return;
 		}
 
 		PowerManagement.preventSleep(Number(sleepMinutes));
-
-		let timeLeft = Number(sleepMinutes) * 60;
-		setRemainingTime(timeLeft);
-		isRunningRef.current = true;
+		const seconds = Number(sleepMinutes) * 60;
+		setRemainingTime(seconds);
 
 		timerRef.current = setInterval(() => {
-			if (!isRunningRef.current) {
-				return;
-			}
-
-			timeLeft -= 1;
-
-			if (timeLeft === 0) {
-				if (timerRef.current) {
-					clearInterval(timerRef.current);
-					timerRef.current = null;
+			setRemainingTime((prev) => {
+				if (prev === null || prev <= 1) {
+					if (timerRef.current) {
+						clearInterval(timerRef.current);
+						timerRef.current = null;
+					}
+					return null;
 				}
-				isRunningRef.current = false;
-				setRemainingTime(null);
-				return;
-			}
-
-			setRemainingTime(timeLeft);
+				return prev - 1;
+			});
 		}, 1000);
 	};
 
