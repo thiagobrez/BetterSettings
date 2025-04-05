@@ -189,10 +189,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		gap: 10,
 	},
-	counterInput: {
-		width: 50,
-		textAlign: "center",
-	},
 	inputContainer: {
 		width: 50,
 		height: 40,
@@ -201,6 +197,12 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	counterInput: {
+		width: 50,
+		height: 40,
+		paddingVertical: 10,
+		textAlign: "center",
 	},
 	startButton: {
 		width: 170,
