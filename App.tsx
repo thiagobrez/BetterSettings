@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "./src/components/Button";
 import PowerManagement, {
@@ -59,8 +59,8 @@ const formatTime = (seconds: number) => {
 function App(): React.JSX.Element {
 	const [sleepMinutes, setSleepMinutes] = useState("30");
 	const [remainingTime, setRemainingTime] = useState<number | null>(null);
-
-	let timer: NodeJS.Timeout;
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
+	const isRunningRef = useRef(false);
 
 	useEffect(() => {
 		// Set up event listener for when timer ends
@@ -68,9 +68,12 @@ function App(): React.JSX.Element {
 			// Timer has ended, update UI state
 		});
 
-		// Clean up the subscription on unmount
+		// Clean up the subscription and timer on unmount
 		return () => {
 			subscription.remove();
+			if (timerRef.current) {
+				clearInterval(timerRef.current);
+			}
 		};
 	}, []);
 
@@ -82,20 +85,42 @@ function App(): React.JSX.Element {
 		setSleepMinutes(String(Number(sleepMinutes) + 5));
 	};
 
-	const onPreventSleep = () => {
+	const togglePreventSleep = () => {
+		if (remainingTime) {
+			PowerManagement.allowSleep();
+			if (timerRef.current) {
+				clearInterval(timerRef.current);
+				timerRef.current = null;
+			}
+			isRunningRef.current = false;
+			setRemainingTime(null);
+			return;
+		}
+
 		PowerManagement.preventSleep(Number(sleepMinutes));
 
 		let timeLeft = Number(sleepMinutes) * 60;
 		setRemainingTime(timeLeft);
+		isRunningRef.current = true;
 
-		timer = setInterval(() => {
+		timerRef.current = setInterval(() => {
+			if (!isRunningRef.current) {
+				return;
+			}
+
 			timeLeft -= 1;
-			setRemainingTime(timeLeft);
 
 			if (timeLeft === 0) {
-				clearInterval(timer);
+				if (timerRef.current) {
+					clearInterval(timerRef.current);
+					timerRef.current = null;
+				}
+				isRunningRef.current = false;
 				setRemainingTime(null);
+				return;
 			}
+
+			setRemainingTime(timeLeft);
 		}, 1000);
 	};
 
@@ -149,7 +174,7 @@ function App(): React.JSX.Element {
 						styles.startButton,
 						pressed && { opacity: 0.5 },
 					]}
-					onPress={onPreventSleep}
+					onPress={togglePreventSleep}
 				>
 					<Text>{remainingTime ? formatTime(remainingTime) : "START"}</Text>
 				</Pressable>
