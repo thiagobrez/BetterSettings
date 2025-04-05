@@ -143,11 +143,15 @@ function App(): React.JSX.Element {
 					<View style={styles.inputContainer}>
 						<TextInput
 							style={styles.counterInput}
-							placeholder="5"
-							placeholderTextColor={"#aaa"}
-							keyboardType="numeric"
+							placeholder="30"
+							placeholderTextColor={theme.colors.separator}
 							value={sleepMinutes.toString()}
-							onChangeText={setSleepMinutes}
+							onChangeText={(text) => {
+								if (/^\d{0,4}$/.test(text)) {
+									setSleepMinutes(text);
+								}
+							}}
+							maxLength={4}
 						/>
 					</View>
 
