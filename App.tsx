@@ -73,11 +73,28 @@ function App(): React.JSX.Element {
 	}, []);
 
 	const onReduceMinutes = () => {
-		setSleepMinutes(String(Number(sleepMinutes) - 5));
+		const currentValue = Number(sleepMinutes);
+		const nextMultipleOf5 = Math.floor(currentValue / 5) * 5;
+		setSleepMinutes(
+			String(
+				Math.max(
+					nextMultipleOf5 === currentValue
+						? nextMultipleOf5 - 5
+						: nextMultipleOf5,
+					0,
+				),
+			),
+		);
 	};
 
 	const onAddMinutes = () => {
-		setSleepMinutes(String(Number(sleepMinutes) + 5));
+		const currentValue = Number(sleepMinutes);
+		const nextMultipleOf5 = Math.ceil(currentValue / 5) * 5;
+		setSleepMinutes(
+			String(
+				nextMultipleOf5 === currentValue ? currentValue + 5 : nextMultipleOf5,
+			),
+		);
 	};
 
 	const togglePreventSleep = () => {
