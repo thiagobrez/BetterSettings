@@ -1,14 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import {
-	Pressable,
-	SafeAreaView,
-	StyleSheet,
-	Switch,
-	Text,
-	TextInput,
-	View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "./src/components/Button";
 import PowerManagement, {
 	TIMER_ENDED_EVENT,
@@ -58,18 +50,22 @@ const quickActions = [
 	},
 ];
 
+const formatTime = (seconds: number) => {
+	const mins = Math.floor(seconds / 60);
+	const secs = seconds % 60;
+	return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+};
+
 function App(): React.JSX.Element {
-	const [isEnabled, setIsEnabled] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 	const [sleepMinutes, setSleepMinutes] = useState("30");
+	const [remainingTime, setRemainingTime] = useState<number | null>(null);
+
+	let timer: NodeJS.Timeout;
 
 	useEffect(() => {
-		checkCurrentState();
-
 		// Set up event listener for when timer ends
 		const subscription = PowerManagement.addListener(TIMER_ENDED_EVENT, () => {
 			// Timer has ended, update UI state
-			setIsEnabled(false);
 		});
 
 		// Clean up the subscription on unmount
@@ -77,30 +73,6 @@ function App(): React.JSX.Element {
 			subscription.remove();
 		};
 	}, []);
-
-	const checkCurrentState = async () => {
-		try {
-			const state = await PowerManagement.getCurrentState();
-
-			setIsEnabled(state);
-			setError(null);
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Unknown error");
-		}
-	};
-
-	const toggleSwitch = async () => {
-		try {
-			if (!isEnabled) {
-				await PowerManagement.preventSleep(Number(sleepMinutes));
-			} else {
-				await PowerManagement.allowSleep();
-			}
-			await checkCurrentState();
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Unknown error");
-		}
-	};
 
 	const onReduceMinutes = () => {
 		setSleepMinutes(String(Number(sleepMinutes) - 5));
@@ -112,6 +84,19 @@ function App(): React.JSX.Element {
 
 	const onPreventSleep = () => {
 		PowerManagement.preventSleep(Number(sleepMinutes));
+
+		let timeLeft = Number(sleepMinutes) * 60;
+		setRemainingTime(timeLeft);
+
+		timer = setInterval(() => {
+			timeLeft -= 1;
+			setRemainingTime(timeLeft);
+
+			if (timeLeft === 0) {
+				clearInterval(timer);
+				setRemainingTime(null);
+			}
+		}, 1000);
 	};
 
 	return (
@@ -157,10 +142,6 @@ function App(): React.JSX.Element {
 					<Button onPress={onAddMinutes}>
 						<Text>+</Text>
 					</Button>
-
-					{/* <Text style={{ position: "absolute", right: 20 }}>
-						{!sleepMinutes || Number(sleepMinutes) > 1 ? "minutes" : "minute"}
-					</Text> */}
 				</View>
 
 				<Pressable
@@ -170,7 +151,7 @@ function App(): React.JSX.Element {
 					]}
 					onPress={onPreventSleep}
 				>
-					<Text>START</Text>
+					<Text>{remainingTime ? formatTime(remainingTime) : "START"}</Text>
 				</Pressable>
 			</View>
 		</View>
@@ -196,15 +177,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		gap: 10,
 	},
-	counterButton: {
-		width: 40,
-		height: 40,
-		borderWidth: 1,
-		borderRadius: 5,
-		borderColor: theme.colors.separator,
-		alignItems: "center",
-		justifyContent: "center",
-	},
 	counterInput: {
 		width: 50,
 		textAlign: "center",
@@ -218,18 +190,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
-	separator: {
-		height: 1,
-		backgroundColor: theme.colors.separator,
-		marginHorizontal: 20,
-	},
 	startButton: {
-		width: 150,
-		height: 40,
+		width: 170,
+		height: 170,
+		borderRadius: 85,
 		borderWidth: 1,
-		borderRadius: 5,
 		borderColor: theme.colors.separator,
-		backgroundColor: theme.colors.success,
 		alignItems: "center",
 		justifyContent: "center",
 		alignSelf: "center",

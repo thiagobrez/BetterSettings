@@ -15,16 +15,17 @@
   _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
 }
 
+NSImage *image = [NSImage imageWithSystemSymbolName:@"bolt.batteryblock" accessibilityDescription:nil];
+NSImage *alternateImage = [NSImage imageWithSystemSymbolName:@"bolt.batteryblock.fill" accessibilityDescription:nil];
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
   statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
   
   NSButton *button = [statusItem button];
-  [button setImage:[NSImage imageWithSystemSymbolName:@"bolt.batteryblock" accessibilityDescription:nil]];
+  [button setImage:image];
   [button setTarget:self];
   [button setAction:@selector(togglePopover:)];
-  [button setButtonType:NSButtonTypeToggle];
-  [button setAlternateImage:[NSImage imageWithSystemSymbolName:@"bolt.batteryblock.fill" accessibilityDescription:nil]];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:_bridge moduleName:@"BetterSettings" initialProperties:@{}];
   NSViewController *rootViewController = [[NSViewController alloc] init];
@@ -36,20 +37,18 @@
   popover.behavior = NSPopoverBehaviorTransient;
   
   [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(popoverDidClose:)
-                                             name:NSPopoverDidCloseNotification
-                                             object:popover];
+                                           selector:@selector(handleSleepPreventionStateChanged:)
+                                               name:@"SleepPreventionStateChanged"
+                                             object:nil];
 }
 
 - (void)openPopover {
   [popover showRelativeToRect:statusItem.button.bounds ofView:statusItem.button preferredEdge:NSMinYEdge];
   [popover.contentViewController.view.window makeKeyWindow];
-  [statusItem.button setState:NSControlStateValueOn];
 }
 
 - (void)closePopover {
   [popover close];
-  [statusItem.button setState:NSControlStateValueOff];
 }
 
 - (void)togglePopover:(id)sender {
@@ -60,8 +59,17 @@
   }
 }
 
-- (void)popoverDidClose:(NSNotification *)notification {
-  [statusItem.button setState:NSControlStateValueOff];
+- (void)handleSleepPreventionStateChanged:(NSNotification *)notification {
+    BOOL isPreventingSleep = [notification.userInfo[@"isPreventingSleep"] boolValue];
+    if (isPreventingSleep) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self->statusItem.button setImage:alternateImage];
+      });
+    } else {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self->statusItem.button setImage:image];
+      });
+    }
 }
 
 // Called when the user tries to reopen the app from the Dock or Spotlight

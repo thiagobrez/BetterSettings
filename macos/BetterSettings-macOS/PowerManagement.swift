@@ -34,6 +34,8 @@ class PowerManagement: RCTEventEmitter {
         )
       
         if result == kIOReturnSuccess {
+            notifySleepPreventionStateChanged(isPreventingSleep: true)
+          
             self.assertionID = assertionID
             
             // If assertion is created successfully, set timer to release the assertion after specified minutes
@@ -48,7 +50,7 @@ class PowerManagement: RCTEventEmitter {
                 }
               }
             }
-            
+          
             resolve(true)
         } else {
             reject(
@@ -87,6 +89,8 @@ class PowerManagement: RCTEventEmitter {
     }
     
     private func releaseAssertion() -> IOReturn {
+        notifySleepPreventionStateChanged(isPreventingSleep: false)
+      
         if assertionID != 0 {
             let result = IOPMAssertionRelease(assertionID)
             assertionID = 0
@@ -100,6 +104,14 @@ class PowerManagement: RCTEventEmitter {
         if hasListeners {
             self.sendEvent(withName: "PowerManagementTimerEnded", body: nil)
         }
+    }
+    
+    private func notifySleepPreventionStateChanged(isPreventingSleep: Bool) {
+        NotificationCenter.default.post(
+            name: Notification.Name("SleepPreventionStateChanged"),
+            object: nil,
+            userInfo: ["isPreventingSleep": isPreventingSleep]
+        )
     }
     
     deinit {
