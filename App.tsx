@@ -1,7 +1,8 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "./src/components/Button";
+import StartButton from "./src/components/StartButton";
 import PowerManagement, {
 	TIMER_ENDED_EVENT,
 } from "./src/modules/PowerManagement";
@@ -49,12 +50,6 @@ const quickActions = [
 		minutes: 1440,
 	},
 ];
-
-const formatTime = (seconds: number) => {
-	const mins = Math.floor(seconds / 60);
-	const secs = seconds % 60;
-	return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-};
 
 function App(): React.JSX.Element {
 	const [sleepMinutes, setSleepMinutes] = useState("30");
@@ -153,7 +148,10 @@ function App(): React.JSX.Element {
 				</View>
 
 				<View style={styles.counter}>
-					<Button onPress={onReduceMinutes}>
+					<Button
+						onPress={onReduceMinutes}
+						disabled={sleepMinutes === "0" || sleepMinutes === ""}
+					>
 						<Text>-</Text>
 					</Button>
 
@@ -177,15 +175,11 @@ function App(): React.JSX.Element {
 					</Button>
 				</View>
 
-				<Pressable
-					style={({ pressed }) => [
-						styles.startButton,
-						pressed && { opacity: 0.5 },
-					]}
+				<StartButton
+					remainingTime={remainingTime}
 					onPress={togglePreventSleep}
-				>
-					<Text>{remainingTime ? formatTime(remainingTime) : "START"}</Text>
-				</Pressable>
+					disabled={sleepMinutes === "0" || sleepMinutes === ""}
+				/>
 			</View>
 		</View>
 	);
@@ -224,16 +218,6 @@ const styles = StyleSheet.create({
 		height: 40,
 		paddingVertical: 10,
 		textAlign: "center",
-	},
-	startButton: {
-		width: 170,
-		height: 170,
-		borderRadius: 85,
-		borderWidth: 1,
-		borderColor: theme.colors.separator,
-		alignItems: "center",
-		justifyContent: "center",
-		alignSelf: "center",
 	},
 	quickActions: {
 		flexDirection: "row",

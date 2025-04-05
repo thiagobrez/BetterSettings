@@ -5,16 +5,19 @@ import { theme } from "../theme";
 type ButtonProps = {
 	children: React.ReactNode;
 	onPress: () => void;
+	disabled?: boolean;
 };
 
-function Button({ children, onPress }: ButtonProps) {
+function Button({ children, onPress, disabled }: ButtonProps) {
 	return (
 		<Pressable
 			style={({ pressed }) => [
 				styles.counterButton,
 				pressed && { opacity: 0.5 },
+				disabled && { opacity: 0.5 },
 			]}
 			onPress={onPress}
+			disabled={disabled}
 		>
 			{children}
 		</Pressable>
