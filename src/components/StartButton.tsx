@@ -15,6 +15,7 @@ function StartButton({ remainingTime, onPress, disabled }: StartButtonProps) {
 			style={({ pressed }) => [
 				styles.startButton,
 				(pressed || disabled) && { opacity: 0.5 },
+				!!remainingTime && { borderColor: theme.colors.success },
 			]}
 			onPress={onPress}
 			disabled={disabled}
@@ -26,9 +27,9 @@ function StartButton({ remainingTime, onPress, disabled }: StartButtonProps) {
 
 const styles = StyleSheet.create({
 	startButton: {
-		width: 170,
-		height: 170,
-		borderRadius: 85,
+		width: 120,
+		height: 120,
+		borderRadius: 60,
 		borderWidth: 1,
 		borderColor: theme.colors.separator,
 		alignItems: "center",

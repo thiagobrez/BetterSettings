@@ -144,7 +144,7 @@ function App(): React.JSX.Element {
 
 			<View style={styles.verticalBlock}>
 				<View>
-					<Text style={styles.headerText}>Prevent display sleep</Text>
+					<Text style={styles.headerText}>Prevent display sleep (min)</Text>
 				</View>
 
 				<View style={styles.counter}>

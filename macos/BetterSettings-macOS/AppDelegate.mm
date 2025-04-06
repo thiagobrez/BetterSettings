@@ -32,7 +32,7 @@ NSImage *alternateImage = [NSImage imageWithSystemSymbolName:@"bolt.batteryblock
   rootViewController.view = rootView;
 
   popover = [[NSPopover alloc] init];
-  popover.contentSize = NSMakeSize(380, 450);
+  popover.contentSize = NSMakeSize(350, 400);
   popover.contentViewController = rootViewController;
   popover.behavior = NSPopoverBehaviorTransient;
   
