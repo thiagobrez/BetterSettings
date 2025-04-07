@@ -83,11 +83,6 @@ class PowerManagement: RCTEventEmitter {
         }
     }
     
-    @objc
-    func getCurrentState(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        resolve(assertionID != 0)
-    }
-    
     private func releaseAssertion() -> IOReturn {
         notifySleepPreventionStateChanged(isPreventingSleep: false)
       

@@ -8,7 +8,6 @@ type PowerManagementEvent = Record<string, never>;
 interface PowerManagementInterface {
 	preventSleep(minutes: number): Promise<boolean>;
 	allowSleep(): Promise<boolean>;
-	getCurrentState(): Promise<boolean>;
 	addListener(
 		eventName: string,
 		listener: (event: PowerManagementEvent) => void,

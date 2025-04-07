@@ -57,11 +57,15 @@ function App(): React.JSX.Element {
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 
 	useEffect(() => {
+		console.log("mounted");
+
 		const subscription = PowerManagement.addListener(TIMER_ENDED_EVENT, () => {
 			// Timer has ended, update UI state
 		});
 
 		return () => {
+			console.log("unmounted!");
+
 			subscription.remove();
 			if (timerRef.current) clearInterval(timerRef.current);
 		};
@@ -92,7 +96,7 @@ function App(): React.JSX.Element {
 		);
 	};
 
-	const togglePreventSleep = () => {
+	const onTogglePreventSleep = () => {
 		if (remainingTime !== null) {
 			PowerManagement.allowSleep();
 
@@ -177,7 +181,7 @@ function App(): React.JSX.Element {
 
 				<StartButton
 					remainingTime={remainingTime}
-					onPress={togglePreventSleep}
+					onPress={onTogglePreventSleep}
 					disabled={sleepMinutes === "0" || sleepMinutes === ""}
 				/>
 			</View>

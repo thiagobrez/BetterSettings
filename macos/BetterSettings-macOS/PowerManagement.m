@@ -18,7 +18,4 @@ RCT_EXTERN_METHOD(preventSleep:(nonnull NSNumber *)minutes
 RCT_EXTERN_METHOD(allowSleep:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(getCurrentState:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-
 @end
