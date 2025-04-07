@@ -19,12 +19,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* BetterSettings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSettings.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* PowerBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PowerBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DCA4F7FD21C311E8F037C62 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		401A38E92D8A3EE100F77999 /* PowerManagement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PowerManagement.m; sourceTree = "<group>"; };
 		401A38EB2D8A3F2800F77999 /* BetterSettings-macOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BetterSettings-macOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		401A38EC2D8A3F2800F77999 /* PowerManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerManagement.swift; sourceTree = "<group>"; };
-		514201492437B4B30078DB4F /* BetterSettings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterSettings.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		514201492437B4B30078DB4F /* PowerBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PowerBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		514201512437B4B40078DB4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -117,8 +117,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* BetterSettings.app */,
-				514201492437B4B30078DB4F /* BetterSettings.app */,
+				13B07F961A680F5B00A75B9A /* PowerBuddy.app */,
+				514201492437B4B30078DB4F /* PowerBuddy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,9 +126,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* BetterSettings-iOS */ = {
+		13B07F861A680F5B00A75B9A /* PowerBuddy-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BetterSettings-iOS" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PowerBuddy-iOS" */;
 			buildPhases = (
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -139,14 +139,14 @@
 			);
 			dependencies = (
 			);
-			name = "BetterSettings-iOS";
+			name = "PowerBuddy-iOS";
 			productName = BetterSettings;
-			productReference = 13B07F961A680F5B00A75B9A /* BetterSettings.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* PowerBuddy.app */;
 			productType = "com.apple.product-type.application";
 		};
-		514201482437B4B30078DB4F /* BetterSettings-macOS */ = {
+		514201482437B4B30078DB4F /* PowerBuddy-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "BetterSettings-macOS" */;
+			buildConfigurationList = 5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "PowerBuddy-macOS" */;
 			buildPhases = (
 				1A938104A937498D81B3BD3B /* [CP] Check Pods Manifest.lock */,
 				514201452437B4B30078DB4F /* Sources */,
@@ -159,9 +159,9 @@
 			);
 			dependencies = (
 			);
-			name = "BetterSettings-macOS";
+			name = "PowerBuddy-macOS";
 			productName = BetterSettings;
-			productReference = 514201492437B4B30078DB4F /* BetterSettings.app */;
+			productReference = 514201492437B4B30078DB4F /* PowerBuddy.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -173,10 +173,12 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = R4X9KNQ7VL;
 						LastSwiftMigration = 1120;
 					};
 					514201482437B4B30078DB4F = {
 						CreatedOnToolsVersion = 11.4;
+						DevelopmentTeam = R4X9KNQ7VL;
 						LastSwiftMigration = 1540;
 						ProvisioningStyle = Automatic;
 					};
@@ -195,8 +197,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* BetterSettings-iOS */,
-				514201482437B4B30078DB4F /* BetterSettings-macOS */,
+				13B07F861A680F5B00A75B9A /* PowerBuddy-iOS */,
+				514201482437B4B30078DB4F /* PowerBuddy-macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -344,6 +346,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R4X9KNQ7VL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "BetterSettings-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -352,8 +355,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BetterSettings;
+				PRODUCT_BUNDLE_IDENTIFIER = ski.brezin.PowerBuddy;
+				PRODUCT_NAME = PowerBuddy;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -366,6 +369,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R4X9KNQ7VL;
 				INFOPLIST_FILE = "BetterSettings-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -373,8 +377,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BetterSettings;
+				PRODUCT_BUNDLE_IDENTIFIER = ski.brezin.PowerBuddy;
+				PRODUCT_NAME = PowerBuddy;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -388,6 +392,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = R4X9KNQ7VL;
 				INFOPLIST_FILE = "BetterSettings-macos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -396,8 +401,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BetterSettings;
+				PRODUCT_BUNDLE_IDENTIFIER = ski.brezin.PowerBuddy;
+				PRODUCT_NAME = PowerBuddy;
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "BetterSettings-macOS/BetterSettings-macOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -412,6 +417,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R4X9KNQ7VL;
 				INFOPLIST_FILE = "BetterSettings-macos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -420,8 +426,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BetterSettings;
+				PRODUCT_BUNDLE_IDENTIFIER = ski.brezin.PowerBuddy;
+				PRODUCT_NAME = PowerBuddy;
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "BetterSettings-macOS/BetterSettings-macOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -484,10 +490,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
+				PRODUCT_NAME = PowerBuddy;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -543,10 +547,8 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
+				PRODUCT_NAME = PowerBuddy;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = false;
@@ -557,7 +559,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BetterSettings-iOS" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PowerBuddy-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -566,7 +568,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "BetterSettings-macOS" */ = {
+		5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "PowerBuddy-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5142015B2437B4B40078DB4F /* Debug */,
