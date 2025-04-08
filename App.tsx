@@ -58,12 +58,18 @@ function App(): React.JSX.Element {
 	const [remainingTime, setRemainingTime] = useState<number | null>(null);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 	const isPopoverOpenRef = useRef<boolean>(false);
+	const endTimeRef = useRef<number | null>(null);
 
 	useEffect(() => {
 		const timerSubscription = PowerManagement.addListener(
 			TIMER_ENDED_EVENT,
 			() => {
-				// Timer has ended, update UI state
+				endTimeRef.current = null;
+				setRemainingTime(null);
+				if (timerRef.current) {
+					clearInterval(timerRef.current);
+					timerRef.current = null;
+				}
 			},
 		);
 
@@ -71,6 +77,10 @@ function App(): React.JSX.Element {
 			POPOVER_SHOW_EVENT,
 			() => {
 				isPopoverOpenRef.current = true;
+
+				if (endTimeRef.current !== null) {
+					startUIUpdates();
+				}
 			},
 		);
 
@@ -78,6 +88,11 @@ function App(): React.JSX.Element {
 			POPOVER_CLOSE_EVENT,
 			() => {
 				isPopoverOpenRef.current = false;
+
+				if (timerRef.current) {
+					clearInterval(timerRef.current);
+					timerRef.current = null;
+				}
 			},
 		);
 
@@ -88,6 +103,43 @@ function App(): React.JSX.Element {
 			if (timerRef.current) clearInterval(timerRef.current);
 		};
 	}, []);
+
+	const tick = () => {
+		if (endTimeRef.current === null) {
+			if (timerRef.current) {
+				clearInterval(timerRef.current);
+				timerRef.current = null;
+			}
+			setRemainingTime(null);
+			return;
+		}
+
+		const now = Date.now();
+		const remaining = Math.max(
+			0,
+			Math.floor((endTimeRef.current - now) / 1000),
+		);
+
+		if (remaining <= 0) {
+			endTimeRef.current = null;
+			if (timerRef.current) {
+				clearInterval(timerRef.current);
+				timerRef.current = null;
+			}
+			setRemainingTime(null);
+			return;
+		}
+
+		setRemainingTime(remaining);
+	};
+
+	const startUIUpdates = () => {
+		if (timerRef.current) {
+			clearInterval(timerRef.current);
+		}
+
+		timerRef.current = setInterval(tick, 1000);
+	};
 
 	const onReduceMinutes = () => {
 		const currentValue = Number(sleepMinutes);
@@ -117,6 +169,7 @@ function App(): React.JSX.Element {
 	const onTogglePreventSleep = () => {
 		if (remainingTime !== null) {
 			PowerManagement.allowSleep();
+			endTimeRef.current = null;
 
 			if (timerRef.current) {
 				clearInterval(timerRef.current);
@@ -128,9 +181,15 @@ function App(): React.JSX.Element {
 		}
 
 		PowerManagement.preventSleep(Number(sleepMinutes));
+
 		const seconds = Number(sleepMinutes) * 60;
 		setRemainingTime(seconds);
 
+		endTimeRef.current = Date.now() + seconds * 1000;
+
+		// When pressing the button, we set a specific interval to update the remaining time by subtracting 1 second each time.
+		// When the popover is closed or opened, we set an interval based on the endTime timestamp.
+		// We have these two different intervals to prevent the timer from showing 1 second less than intended on the first tick.
 		timerRef.current = setInterval(() => {
 			setRemainingTime((prev) => {
 				if (prev === null || prev <= 1) {

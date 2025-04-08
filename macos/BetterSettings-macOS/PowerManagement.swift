@@ -126,8 +126,8 @@ class PowerManagement: RCTEventEmitter {
         // Add observers for popover notifications
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handlePopoverDidShow),
-            name: NSPopover.didShowNotification,
+            selector: #selector(handlePopoverWillShow),
+            name: NSPopover.willShowNotification,
             object: nil
         )
         
@@ -150,7 +150,7 @@ class PowerManagement: RCTEventEmitter {
     
     // MARK: Popover notification handlers
     
-    @objc private func handlePopoverDidShow(_ notification: Notification) {
+    @objc private func handlePopoverWillShow(_ notification: Notification) {
         if hasListeners {
             sendEvent(withName: "onPopoverShow", body: nil)
         }
