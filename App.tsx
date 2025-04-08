@@ -5,6 +5,8 @@ import Button from "./src/components/Button";
 import StartButton from "./src/components/StartButton";
 import PowerManagement, {
 	TIMER_ENDED_EVENT,
+	POPOVER_SHOW_EVENT,
+	POPOVER_CLOSE_EVENT,
 } from "./src/modules/PowerManagement";
 import { theme } from "./src/theme";
 
@@ -55,18 +57,34 @@ function App(): React.JSX.Element {
 	const [sleepMinutes, setSleepMinutes] = useState("30");
 	const [remainingTime, setRemainingTime] = useState<number | null>(null);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
+	const isPopoverOpenRef = useRef<boolean>(false);
 
 	useEffect(() => {
-		console.log("mounted");
+		const timerSubscription = PowerManagement.addListener(
+			TIMER_ENDED_EVENT,
+			() => {
+				// Timer has ended, update UI state
+			},
+		);
 
-		const subscription = PowerManagement.addListener(TIMER_ENDED_EVENT, () => {
-			// Timer has ended, update UI state
-		});
+		const showSubscription = PowerManagement.addListener(
+			POPOVER_SHOW_EVENT,
+			() => {
+				isPopoverOpenRef.current = true;
+			},
+		);
+
+		const closeSubscription = PowerManagement.addListener(
+			POPOVER_CLOSE_EVENT,
+			() => {
+				isPopoverOpenRef.current = false;
+			},
+		);
 
 		return () => {
-			console.log("unmounted!");
-
-			subscription.remove();
+			timerSubscription.remove();
+			showSubscription.remove();
+			closeSubscription.remove();
 			if (timerRef.current) clearInterval(timerRef.current);
 		};
 	}, []);

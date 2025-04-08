@@ -117,18 +117,48 @@ class PowerManagement: RCTEventEmitter {
     // MARK: RCTEventEmitter setup
     
     override func supportedEvents() -> [String] {
-        return ["PowerManagementTimerEnded"]
+        return ["PowerManagementTimerEnded", "onPopoverShow", "onPopoverClose"]
     }
     
     override func startObserving() {
         hasListeners = true
+        
+        // Add observers for popover notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handlePopoverDidShow),
+            name: NSPopover.didShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handlePopoverDidClose),
+            name: NSPopover.didCloseNotification,
+            object: nil
+        )
     }
     
     override func stopObserving() {
         hasListeners = false
+        NotificationCenter.default.removeObserver(self)
     }
     
     override static func requiresMainQueueSetup() -> Bool {
         return false
+    }
+    
+    // MARK: Popover notification handlers
+    
+    @objc private func handlePopoverDidShow(_ notification: Notification) {
+        if hasListeners {
+            sendEvent(withName: "onPopoverShow", body: nil)
+        }
+    }
+    
+    @objc private func handlePopoverDidClose(_ notification: Notification) {
+        if hasListeners {
+            sendEvent(withName: "onPopoverClose", body: nil)
+        }
     }
 }
